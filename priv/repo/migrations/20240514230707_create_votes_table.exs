@@ -7,7 +7,5 @@ defmodule LivePoll.Repo.Migrations.CreateVotesTable do
 
       timestamps()
     end
-
-    create unique_index(:votes, [:vote_ip])
   end
 end
