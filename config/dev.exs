@@ -3,7 +3,7 @@ import Config
 # Configure your database
 config :live_poll, LivePoll.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "1234",
   hostname: "localhost",
   database: "live_poll_dev",
   stacktrace: true,
