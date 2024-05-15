@@ -6,10 +6,6 @@ defmodule LivePoll.Repo.Migrations.AddReferencesIntoTables do
       add :poll_id, references(:polls, on_delete: :delete_all)
     end
 
-    alter table(:categories) do
-      add :poll_id, references(:polls)
-    end
-
     alter table(:votes) do
       add :poll_id, references(:polls, on_delete: :delete_all)
       # User

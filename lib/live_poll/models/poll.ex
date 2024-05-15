@@ -1,8 +1,10 @@
-defmodule LivePoll.Poll do
+defmodule LivePoll.Models.Poll do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias LivePoll.Category
+  alias LivePoll.Models.Option
+  alias LivePoll.Models.PollCategory
+  alias LivePoll.Models.Vote
 
   @fields [:title, :description, :image_url, :creator_ip]
 
@@ -12,7 +14,9 @@ defmodule LivePoll.Poll do
     field :image_url, :binary
     field :creator_ip, :string
 
-    has_many :category, Category
+    has_many :vote, Vote
+    has_many :poll_category, PollCategory
+    has_many :option, Option
 
     timestamps()
   end

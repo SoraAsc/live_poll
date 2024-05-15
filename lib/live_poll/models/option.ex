@@ -1,17 +1,17 @@
-defmodule LivePoll.Vote do
+defmodule LivePoll.Models.Option do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias LivePoll.Option
-  alias LivePoll.Poll
+  alias LivePoll.Models.Vote
+  alias LivePoll.Models.Poll
 
-  @fields [:vote_ip, :poll_id, :option_id]
+  @fields [:option_name, :poll_id]
 
-  schema "votes" do
-    field :vote_ip, :string
+  schema "options" do
+    field :option_name, :string
 
-    belongs_to :option, Option
     belongs_to :poll, Poll
+    has_many :vote, Vote
 
     timestamps()
   end

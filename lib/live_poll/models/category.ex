@@ -1,16 +1,16 @@
-defmodule LivePoll.Category do
+defmodule LivePoll.Models.Category do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias LivePoll.Poll
+  alias LivePoll.PollCategory
 
-  @fields [:name, :description, :poll_id]
+  @fields [:name, :description]
 
   schema "categories" do
     field :name, :string
     field :description, :string
 
-    belongs_to :poll, Poll
+    has_many :poll_category, PollCategory
 
     timestamps()
   end
