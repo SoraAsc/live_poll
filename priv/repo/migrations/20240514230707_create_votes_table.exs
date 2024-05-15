@@ -3,7 +3,7 @@ defmodule LivePoll.Repo.Migrations.CreateVotesTable do
 
   def change do
     create table(:votes) do
-      add :vote_ip, :string
+      add :vote_ip, :string, null: false
 
       timestamps()
     end
