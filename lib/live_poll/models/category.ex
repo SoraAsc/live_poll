@@ -2,7 +2,7 @@ defmodule LivePoll.Models.Category do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias LivePoll.PollCategory
+  alias LivePoll.Models.PollCategory
 
   @fields [:name, :description]
 
