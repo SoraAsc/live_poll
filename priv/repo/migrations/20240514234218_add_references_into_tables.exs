@@ -11,5 +11,7 @@ defmodule LivePoll.Repo.Migrations.AddReferencesIntoTables do
       # User
       add :option_id, references(:options, on_delete: :delete_all)
     end
+
+    create unique_index(:votes, [:poll_id, :vote_ip])
   end
 end

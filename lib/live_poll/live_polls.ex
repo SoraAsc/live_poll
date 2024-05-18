@@ -1,6 +1,7 @@
 defmodule LivePoll.LivePolls do
 
   import Ecto.Query, warn: false
+  alias LivePoll.Models.Vote
   alias LivePoll.Models.{Option, Poll}
   alias LivePoll.Repo
 
@@ -29,16 +30,33 @@ defmodule LivePoll.LivePolls do
   end
 
   def list_polls do
-    Repo.all(Poll)
+    query = from p in Poll, select: %{title: p.title, image_url: p.image_url, ip: p.creator_ip}
+    Repo.all(query)
   end
 
-  def get_poll!(id), do: Repo.get!(Poll, id)
+  def get_poll!(id) do
+    poll = Poll
+      |> where([p], p.id == ^id)
+      |> select([p], %{id: p.id, title: p.title, description: p.description})
+      |> Repo.one!
 
-  # def create_poll(attrs \\ %{}) do
-  #   %Poll{}
-  #   |> Poll.changeset(attrs)
-  #   |> Repo.insert()
-  # end
+    options = Option
+      |> where([o], o.poll_id == ^poll.id)
+      |> select([o], %{id: o.id, name: o.option_name})
+      |> Repo.all
+    Map.put(poll, :options, options)
+    # Map.delete(Map.put(poll, :options, options), :id)
+  end
+
+  def count_votes(id) do
+    Repo.one(from v in Vote, where: v.poll_id == ^id, select: count("*"))
+  end
+
+  def perform_vote(attrs_vote) do
+    attrs_vote
+      |> Vote.changeset()
+      |> Repo.insert(on_conflict: {:replace, [:option_id]}, conflict_target: [:poll_id, :vote_ip])
+  end
 
   # def update_poll(%Poll{} = poll) do
   #   poll
@@ -46,9 +64,9 @@ defmodule LivePoll.LivePolls do
   #   |> Repo.update()
   # end
 
-  # def delete_poll(%Poll{} = poll) do
-  #   Repo.delete(poll)
-  # end
+  def delete_poll(%Poll{} = poll) do
+    Repo.delete(poll)
+  end
 
   # def change_poll(%Poll{} = poll, attrs \\ %{}) do
   #   Poll.changeset(poll, attrs)
