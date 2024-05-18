@@ -49,7 +49,7 @@ defmodule LivePoll.LivePolls do
   end
 
   def count_votes(id) do
-    Repo.one(from v in Vote, where: v.poll_id == ^id, select: count("*"))
+    Repo.one(from v in Vote, where: v.poll_id == ^id, select: count(v.id))
   end
 
   def perform_vote(attrs_vote) do
@@ -58,18 +58,19 @@ defmodule LivePoll.LivePolls do
       |> Repo.insert(on_conflict: {:replace, [:option_id]}, conflict_target: [:poll_id, :vote_ip])
   end
 
-  # def update_poll(%Poll{} = poll) do
-  #   poll
-  #   |> Poll.changeset()
-  #   |> Repo.update()
-  # end
-
-  def delete_poll(%Poll{} = poll) do
-    Repo.delete(poll)
+  def delete_poll(poll_id, creator_ip) do
+    query = from(p in Poll, where: p.id == ^poll_id and p.creator_ip == ^creator_ip)
+    case Repo.delete_all(query) do
+      {0, nil} -> {:error, "You can't delete this poll"}
+      _ -> {:ok, "Poll deleted"}
+    end
   end
 
-  # def change_poll(%Poll{} = poll, attrs \\ %{}) do
-  #   Poll.changeset(poll, attrs)
-  # end
-
+  def get_poll_results(poll_id) do
+    query = from o in Option,
+      left_join: v in Vote, on: o.poll_id == ^poll_id and o.id == v.option_id,
+      group_by: o.option_name,
+      select: %{option_name: o.option_name, vote_count: count(v.id)}
+    Repo.all(query)
+  end
 end
