@@ -19,13 +19,15 @@ config :live_poll, LivePoll.Repo,
 config :live_poll, LivePollWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4000],
+  # http: [ip: {127, 0, 0, 1}, port: 4000],
+  http: [ip: {0, 0, 0, 0}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
   secret_key_base: "hsVE1TsszttlJy6oT+xtWJUXbC6h0C2zScO7OKK7o9Moo95mIB9lChofe6+eePUZ",
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:live_poll, ~w(--sourcemap=inline --watch)]}
+    esbuild: {Esbuild, :install_and_run, [:live_poll, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:live_poll, ~w(--watch)]}
   ]
 
 # ## SSL Support
