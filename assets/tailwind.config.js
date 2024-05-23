@@ -14,9 +14,19 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                brand: "#FD4F00",
                 primary: "#272D2D",
+                secondary: "#2C363F",
+                tertiary: "#A41623",
+                quartiary: "#F5F5F5",
             },
+        },
+        fontFamily: {
+            keania_one: ["KeaniaOne", "sans-serif"],
+            inter: ["Inter", "sans-serif"],
+        },
+        fontWeight: {
+            regular: "normal",
+            bold: "bold",
         },
     },
     plugins: [

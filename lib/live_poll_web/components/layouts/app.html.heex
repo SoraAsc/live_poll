@@ -1,4 +1,11 @@
-<header class="flex justify-between">dwd</header>
+<header class="flex justify-between shadow-md items-center p-2 ">
+    <span class="text-quartiary font-keania_one text-4xl ml-5">Live Poll</span>
+    <div class="mr-5 text-quartiary font-inter text-sm space-x-4">
+        <.default_button text="Login"/>
+        <.default_button_red text="Sign up"/>
+    </div>
+</header>
+
 <main class="px-4 py-20 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-2xl">
         <.flash_group flash={@flash} /> <%= @inner_content %>
