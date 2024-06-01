@@ -48,6 +48,16 @@ body {
     font-weight: 400;
 }
 
-/* .justify-center-safe {
-    justify-content: safe center;
-} */
+.svg-button {
+    @apply text-quartiary fill-current w-6 h-6 cursor-pointer;
+}
+
+.dropdown_select {
+    @apply relative select-none font-im_fell_great_primer_sc border border-quartiary;
+    @apply text-quartiary bg-transparent rounded-xl w-48 h-11;
+}
+
+.dropdown_select_menu {
+    @apply absolute right-0 origin-top mt-1 py-2 w-full;
+    @apply bg-primary rounded-md shadow-md border border-quartiary flex-col;
+}

@@ -14,9 +14,8 @@
     </div>
     <hr class="border-quartiary/30">
     <div class="mt-4 mx-32 flex justify-between items-center">
-        <select name="field" class="font-im_fell_great_primer_sc border-quinary text-quartiary bg-transparent rounded-xl w-40">
-            <option value="name">Name</option>
-        </select>
+        <.select_dropdown options={LivePoll.Utils.FilterOptions.filter_names} 
+            current_filter={@selected_filter} sort_order={@sort_order}/>
         <!--<select name="categories" multiple
             class="border-quinary text-quartiary bg-transparent rounded-xl w-40 text-center">
             <option value="food">Food</option>
