@@ -2,6 +2,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+/* CSS Reset and Basic Configurations */
 *,
 *:after,
 *:before {
@@ -13,17 +14,40 @@
 body {
     font-size: 100%;
     list-style-type: none;
+    @apply bg-primary min-w-full w-auto min-h-screen;
 }
+
+/* Fonts Definition */
 
 @font-face {
     font-family: "KeaniaOne";
     src: url("/fonts/KeaniaOne-Regular.ttf");
-    font-weight: normal;
+    font-weight: 400;
     font-style: normal;
 }
+
+@font-face {
+    font-family: "Inter";
+    src: url("/fonts/Inter-Thin.ttf");
+    font-weight: 100;
+}
+
 @font-face {
     font-family: "Inter";
     src: url("/fonts/Inter-Regular.ttf");
-    font-weight: normal;
-    font-style: normal;
+    font-weight: 400;
 }
+@font-face {
+    font-family: "IFellDoubleP";
+    src: url("/fonts/IMFellDoublePica-Regular.ttf");
+    font-weight: 400;
+}
+@font-face {
+    font-family: "IFellPrimerSC";
+    src: url("/fonts/IMFellGreatPrimerSC-Regular.ttf");
+    font-weight: 400;
+}
+
+/* .justify-center-safe {
+    justify-content: safe center;
+} */

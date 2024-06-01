@@ -18,15 +18,15 @@ module.exports = {
                 secondary: "#2C363F",
                 tertiary: "#A41623",
                 quartiary: "#F5F5F5",
+                quinary: "#0A1A2F",
+                senary: "#4A7A96",
             },
         },
         fontFamily: {
             keania_one: ["KeaniaOne", "sans-serif"],
             inter: ["Inter", "sans-serif"],
-        },
-        fontWeight: {
-            regular: "normal",
-            bold: "bold",
+            im_fell_great_primer_sc: ["IFellPrimerSC", "sans-serif"],
+            im_fell_double_pica: ["IFellDoubleP", "sans-serif"],
         },
     },
     plugins: [
