@@ -2,24 +2,24 @@
     <div class="mb-4 font-inter font-thin group flex justify-between mx-5">
         <label class="relative">
             <input maxlength="20" type="text" placeholder="Search..." 
-                class="py-3 pl-5 pr-12 text-quartiary placeholder:text-quartiary/50 bg-transparent rounded-full border-quinary/50 w-72 text-base"
+                class="py-3 pl-5 pr-12 text-quartiary placeholder:text-quartiary/50 bg-transparent rounded-full border-quartiary w-72 text-base"
             >
             <svg class="group-focus-within:text-quartiary hover:opacity-0 transition-opacity text-quartiary/50 fill-current  w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-6" viewBox="0 0 32 32">
                 <path d="M23.484 20.688a13 13 0 1 0-2.794 2.796h-.002c.059.08.124.157.196.23l7.7 7.7a2 2 0 1 0 2.83-2.828l-7.7-7.7a1.99 1.99 0 0 0-.23-.198ZM24 13a11 11 0 1 1-21.999 0A11 11 0 0 1 24 13Z"/>
             </svg>
         </label>
-        <button type="button" class="text-2xl text-quartiary rounded-full border border-quinary/50 px-8 hover:bg-quartiary hover:text-quinary transition-colors">
+        <button type="button" class="text-2xl text-quartiary rounded-full border border-quartiary px-8 hover:bg-quartiary hover:text-quinary transition-colors">
             Create new Poll
         </button>
     </div>
     <hr class="border-quartiary/30">
-    <div class="mt-4 mx-32 flex justify-between items-center">
+    <div class="mt-4 mx-14 flex justify-between items-center">
         <.select_dropdown options={LivePoll.Utils.FilterOptions.filter_names} 
-            current_filter={@selected_filter} sort_order={@sort_order}/>
-        <!--<select name="categories" multiple
-            class="border-quinary text-quartiary bg-transparent rounded-xl w-40 text-center">
-            <option value="food">Food</option>
-        </select> -->
+            current_filter={@selected_filter} sort_order={@sort_order} 
+            id="dropdown_menu_select" event="pick_option_select"/>
+
+        <.select_dropdown_multiple options={LivePoll.Utils.FilterOptions.categories} 
+            selecteds={@desired_categories} id="dropdown_menu_multiple_select" event="pick_options_m_select"/>
     </div>
     <div class="mt-4 mx-32 flex justify-start flex-wrap gap-8">
         <%= for poll <- @polls do %>

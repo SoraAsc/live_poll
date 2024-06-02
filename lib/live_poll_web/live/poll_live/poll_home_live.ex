@@ -10,6 +10,7 @@ defmodule LivePollWeb.PollLive.PollHomeLive do
       |> assign(:polls, list_polls())
       |> assign(:selected_filter, "Name")
       |> assign(:sort_order, "asc")
+      |> assign(:desired_categories, [])
     }
   end
 
@@ -24,6 +25,21 @@ defmodule LivePollWeb.PollLive.PollHomeLive do
     {:noreply, socket
       |> assign(:sort_order, sort)
     }
+  end
+
+  def handle_event("pick_options_m_select", %{"value" => value}, socket) do
+    cats = delete_or_insert(socket.assigns.desired_categories, value)
+    IO.inspect(value)
+    {:noreply, socket
+      |> assign(:desired_categories, cats)
+    }
+  end
+
+  defp delete_or_insert(list, item) do
+    case Enum.member?(list, item) do
+      true -> Enum.filter(list, fn x -> x != item end)
+      false -> [item | list]
+    end
   end
 
   # defp get_public_ip do
