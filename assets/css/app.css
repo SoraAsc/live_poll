@@ -61,3 +61,18 @@ body {
     @apply absolute right-0 origin-top mt-1 py-2 w-full;
     @apply bg-primary rounded-md shadow-md border border-quartiary flex-col;
 }
+
+.form_group {
+    @apply bg-secondary border-t-8 rounded-t-2xl border-t-tertiary drop-shadow-lg;
+    @apply min-w-[320px] w-6/12 px-12 mx-auto py-2;
+    @apply font-im_fell_great_primer_sc;
+    @apply flex flex-col space-y-4;
+}
+
+.form_group input {
+    @apply bg-transparent text-quartiary border-tertiary;
+}
+
+.form_group button {
+    @apply bg-quartiary px-6 py-2 rounded-lg;
+}

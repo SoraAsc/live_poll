@@ -28,6 +28,7 @@ defmodule LivePollWeb.Router do
     # get "/", PageController, :home
 
     live "/", PollLive.PollHomeLive
+    live "/create", PollLive.Create.PollCreateLive
   end
 
   # Other scopes may use custom stacks.
