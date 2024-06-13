@@ -11,6 +11,7 @@
     box-sizing: border-box;
     text-decoration: none;
 }
+
 body {
     font-size: 100%;
     list-style-type: none;
@@ -64,15 +65,28 @@ body {
 
 .form_group {
     @apply bg-secondary border-t-8 rounded-t-2xl border-t-tertiary drop-shadow-lg;
-    @apply min-w-[320px] w-6/12 px-12 mx-auto py-2;
+    @apply min-w-[320px] w-6/12 px-12 mx-auto py-4 text-quartiary;
     @apply font-im_fell_great_primer_sc;
     @apply flex flex-col space-y-4;
 }
 
-.form_group input {
-    @apply bg-transparent text-quartiary border-tertiary;
+.form_group input,
+.form_group textarea {
+    @apply bg-transparent border-tertiary rounded-2xl w-full;
 }
 
-.form_group button {
-    @apply bg-quartiary px-6 py-2 rounded-lg;
+.form_group input[type="text"]:focus,
+.form_group textarea:focus {
+    @apply border-tertiary bg-none shadow-none ring-0 outline-none;
+}
+
+.form_group .submit {
+    @apply flex;
+    @apply before:hero-plus-circle-solid before:relative before:right-2;
+    @apply bg-quartiary text-tertiary w-auto mx-auto font-im_fell_double_pica px-6 py-2 rounded-xl;
+}
+
+.form_group .add_opt {
+    @apply before:hero-plus-circle-solid before:relative before:right-2;
+    @apply float-right bg-tertiary px-3 py-2 rounded-xl border-2 text-sm;
 }

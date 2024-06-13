@@ -1,5 +1,35 @@
-
 <.form for={@changeset} class="form_group" phx-submit="create_poll">
-    <.input type="text" field={@changeset[:title]} placeholder="Title"/>
-    <button>Create Poll</button>
+    <.custom_input type="text" field={@changeset[:title]} placeholder="Title" required/>
+    <.custom_input_area field={@changeset[:description]} 
+        placeholder="Description" class="min-h-28 max-h-96"/>
+    <div class="relative flex items-center">
+        <input type="text" id="option-input" placeholder="Provide an Option" />
+        <div id="add-option-trigger" phx-hook="AddOption" 
+            class="cursor-pointer rounded-e-xl w-10 h-full absolute right-0 flex 
+            items-center bg-tertiary justify-center p-1 focus:outline-none
+            after:hero-plus-circle-solid after:w-full after:h-full">
+        </div>
+    </div>
+    <h5 class="text-3xl mx-auto">Options</h5>
+    <div class="space-y-3">
+        <%= for {option, i} <- Enum.with_index(@options) do %>
+            <div class="relative flex items-center">
+                <input 
+                    type="text" 
+                    value={option.option_name} 
+                    placeholder={"Option " <> Integer.to_string(i + 1)} 
+                    id={"option-input-" <> Integer.to_string(i)}
+                    phx-blur="update_option" 
+                    phx-value-index={i}
+                />
+                <div phx-click="remove_option" phx-value-index={i}
+                    class="cursor-pointer rounded-e-xl w-10 h-full absolute right-0 
+                    flex items-center bg-tertiary justify-center p-1
+                    after:hero-trash-solid after:w-full after:h-full">
+                </div>
+            </div>
+        <% end %> 
+    </div>
+    <button type="submit" class="submit">Create Poll</button>
 </.form>
+
