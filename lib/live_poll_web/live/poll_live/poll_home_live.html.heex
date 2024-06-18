@@ -23,12 +23,15 @@
     </div>
     <div class="mt-4 mx-32 flex justify-start flex-wrap gap-8">
         <%= for poll <- @polls do %>
-            <div class="flex flex-col justify-between border-2 border-senary text-quartiary rounded-2xl h-64 w-56 text-sm text-center font-im_fell_double_pica">
+        <.link patch={~p"/poll/inspect/#{poll.id}"}>
+            <div class="flex flex-col justify-between border-2 hover:scale-110 cursor-pointer transition-transform
+            border-senary text-quartiary rounded-2xl h-64 w-56 text-sm text-center font-im_fell_double_pica">
                 <span class="bg-secondary/90 rounded-t-2xl p-2 truncate"><%= poll.title %></span>
                 <div class="flex-1 bg-quartiary"></div>
                 <span class="bg-secondary/90 rounded-b-2xl p-2 truncate">by Guest (<%= poll.ip %>)</span>
             </div>
+        </.link>
         <% end %>
     </div>
-    dwdw <%= @client_ip %>
+    IP: <%= @client_ip %>
 </div>

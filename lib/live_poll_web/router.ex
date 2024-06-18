@@ -29,6 +29,7 @@ defmodule LivePollWeb.Router do
 
     live "/", PollLive.PollHomeLive
     live "/create", PollLive.Create.PollCreateLive
+    live "/poll/inspect/:id", PollLive.Inspect.PollInspectLive
   end
 
   # Other scopes may use custom stacks.

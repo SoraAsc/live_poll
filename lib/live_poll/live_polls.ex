@@ -30,7 +30,7 @@ defmodule LivePoll.LivePolls do
   end
 
   def list_polls do
-    query = from p in Poll, select: %{title: p.title, image_url: p.image_url, ip: p.creator_ip}
+    query = from p in Poll, select: %{id: p.id, title: p.title, image_url: p.image_url, ip: p.creator_ip}
     Repo.all(query)
   end
 

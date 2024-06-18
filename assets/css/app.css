@@ -64,13 +64,13 @@ body {
 }
 
 .form_group {
-    @apply bg-secondary border-t-8 rounded-t-2xl border-t-tertiary drop-shadow-lg;
-    @apply min-w-[320px] w-6/12 px-12 mx-auto py-4 text-quartiary;
+    @apply bg-secondary border-t-8 rounded-2xl border-t-tertiary drop-shadow-lg;
+    @apply min-w-[320px] w-8/12 px-12 mx-auto py-4 text-quartiary;
     @apply font-im_fell_great_primer_sc;
     @apply flex flex-col space-y-4;
 }
 
-.form_group input,
+.form_group input[type="text"],
 .form_group textarea {
     @apply bg-transparent border-tertiary rounded-2xl w-full;
 }
@@ -80,10 +80,22 @@ body {
     @apply border-tertiary bg-none shadow-none ring-0 outline-none;
 }
 
+
+.form_group input[type="radio"] {
+    @apply bg-transparent border-tertiary p-3 mr-2 cursor-pointer transition-colors;
+}
+
+.form_group input[type="radio"]:checked {
+    @apply bg-none bg-quartiary;
+}
+
+.default_button {
+    @apply before:relative before:right-2;
+    @apply bg-quartiary text-tertiary font-im_fell_double_pica px-6 py-2 rounded-xl;
+}
+
 .form_group .submit {
-    @apply flex;
-    @apply before:hero-plus-circle-solid before:relative before:right-2;
-    @apply bg-quartiary text-tertiary w-auto mx-auto font-im_fell_double_pica px-6 py-2 rounded-xl;
+    @apply default_button before:hero-plus-circle-solid mx-auto w-auto;
 }
 
 .form_group .add_opt {
