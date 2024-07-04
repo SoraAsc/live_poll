@@ -1,0 +1,12 @@
+<div class="form_group">
+    <canvas id="custom_chart" phx-hook="CustomChart" width="300" height="300"
+        class="mx-auto"
+        data-type="bar"
+        data-label="Votes"
+        data-labels={Jason.encode!(@options)}
+        data-dataset={Jason.encode!(@votes)}
+    />
+    <.link patch={~p"/poll/inspect/#{@poll.id}"} class="default_button before:hero-arrow-left-solid min-w-40 text-lg">
+        Back to Poll
+    </.link>
+</div>

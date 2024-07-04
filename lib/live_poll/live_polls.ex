@@ -68,8 +68,9 @@ defmodule LivePoll.LivePolls do
 
   def get_poll_results(poll_id) do
     query = from o in Option,
-      left_join: v in Vote, on: o.poll_id == ^poll_id and o.id == v.option_id,
+      left_join: v in Vote, on: o.id == v.option_id,
       group_by: o.option_name,
+      where: o.poll_id == ^poll_id,
       select: %{option_name: o.option_name, vote_count: count(v.id)}
     Repo.all(query)
   end

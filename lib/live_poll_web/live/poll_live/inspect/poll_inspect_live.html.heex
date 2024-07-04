@@ -19,8 +19,8 @@
             Vote
         </button>
         <span class="text-2xl"><%= @votes_count %> votes</span>
-        <button type="button" class="default_button before:hero-chart-bar-solid min-w-40 text-lg">
+        <.link patch={~p"/poll/result/#{@poll.id}"} class="default_button before:hero-chart-bar-solid min-w-40 text-lg">
             Show Results
-        </button>
+        </.link>
     </div>
 </form>

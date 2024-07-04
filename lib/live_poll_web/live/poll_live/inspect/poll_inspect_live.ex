@@ -1,8 +1,6 @@
 defmodule LivePollWeb.PollLive.Inspect.PollInspectLive do
-  alias LivePollWeb.PollLive
   alias Phoenix.PubSub
   use LivePollWeb, :live_view
-  alias LivePoll.Models.{Poll}
   import LivePoll.LivePolls
   def mount(%{"id" => id}, session, socket) do
     if(connected?(socket)) do
