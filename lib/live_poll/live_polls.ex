@@ -35,17 +35,17 @@ defmodule LivePoll.LivePolls do
   end
 
   def get_poll!(id) do
-    poll = Poll
-      |> where([p], p.id == ^id)
-      |> select([p], %{id: p.id, title: p.title, description: p.description})
-      |> Repo.one!
+    try do
+      poll = Repo.get!(Poll, id)
+      options = Option
+        |> where([o], o.poll_id == ^id)
+        |> select([o], %{id: o.id, name: o.option_name})
+        |> Repo.all()
 
-    options = Option
-      |> where([o], o.poll_id == ^poll.id)
-      |> select([o], %{id: o.id, name: o.option_name})
-      |> Repo.all
-    Map.put(poll, :options, options)
-    # Map.delete(Map.put(poll, :options, options), :id)
+      Map.put(poll, :options, options)
+    rescue
+      _ -> nil
+    end
   end
 
   def count_votes(id) do

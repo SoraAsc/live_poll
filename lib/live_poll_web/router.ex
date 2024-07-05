@@ -22,16 +22,23 @@ defmodule LivePollWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/poll", LivePollWeb do
+    pipe_through :browser
+
+    live "/inspect/:id", PollLive.Inspect.PollInspectLive
+    live "/result/:id", PollLive.Result.PollResultLive
+  end
+
   scope "/", LivePollWeb do
     pipe_through :browser
 
-    # get "/", PageController, :home
-
     live "/", PollLive.PollHomeLive
     live "/create", PollLive.Create.PollCreateLive
-    live "/poll/inspect/:id", PollLive.Inspect.PollInspectLive
-    live "/poll/result/:id", PollLive.Result.PollResultLive
+
+    live "/*path", PollLive.Error404Live.Error404Live
   end
+
+
 
   # Other scopes may use custom stacks.
   # scope "/api", LivePollWeb do

@@ -102,3 +102,7 @@ body {
     @apply before:hero-plus-circle-solid before:relative before:right-2;
     @apply float-right bg-tertiary px-3 py-2 rounded-xl border-2 text-sm;
 }
+
+.error_404 {
+    @apply font-keania_one text-quartiary flex flex-col justify-center items-center pt-14 space-y-10;
+}

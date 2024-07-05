@@ -3,16 +3,35 @@ defmodule LivePollWeb.PollLive.Inspect.PollInspectLive do
   use LivePollWeb, :live_view
   import LivePoll.LivePolls
   def mount(%{"id" => id}, session, socket) do
-    if(connected?(socket)) do
-      PubSub.subscribe(LivePoll.PubSub, "vote_counter#{id}")
+
+    case get_poll!(id) do
+      nil ->
+        {:ok, socket
+          |> put_flash(:error, "Essa página não existe!")
+          |> push_redirect(to: "/")}
+      poll ->
+        if(connected?(socket)) do
+          PubSub.subscribe(LivePoll.PubSub, "vote_counter#{id}")
+        end
+
+        user_ip = Map.get(session, "user_ip")
+        {:ok, socket
+          |> assign(:client_ip, user_ip)
+          |> assign(:poll, poll)
+          |> assign(:votes_count, formart_votes(count_votes(id)))
+        }
     end
 
-    user_ip = Map.get(session, "user_ip")
-    {:ok, socket
-      |> assign(:client_ip, user_ip)
-      |> assign(:poll, get_poll!(id))
-      |> assign(:votes_count, formart_votes(count_votes(id)))
-    }
+    # if(connected?(socket)) do
+    #   PubSub.subscribe(LivePoll.PubSub, "vote_counter#{id}")
+    # end
+
+    # user_ip = Map.get(session, "user_ip")
+    # {:ok, socket
+    #   |> assign(:client_ip, user_ip)
+    #   |> assign(:poll, get_poll!(id))
+    #   |> assign(:votes_count, formart_votes(count_votes(id)))
+    # }
   end
 
   defp formart_votes(num) do
