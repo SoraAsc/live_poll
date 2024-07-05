@@ -10,7 +10,10 @@
     </div>
     <%= for option <- @poll.options do %>
         <div class="font-im_fell_double_pica">
-            <input type="radio" id={"Option " <> Integer.to_string(option.id)} name="Options" value={option.id} required>
+            <input 
+                checked={option.id == @selected_option}
+                type="radio" id={"Option " <> Integer.to_string(option.id)} 
+                name="Options" value={option.id} required>
             <label class="text-xl truncate align-middle" for={option.name}><%= option.name %></label>
         </div>
     <% end %>

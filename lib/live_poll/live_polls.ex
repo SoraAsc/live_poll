@@ -53,7 +53,11 @@ defmodule LivePoll.LivePolls do
   end
 
   def already_voted(poll_id, vote_ip) do
-    Repo.exists?(from v in Vote, where: ^vote_ip == v.vote_ip and ^poll_id == v.poll_id)
+    Vote
+      |> where([v], v.poll_id == ^poll_id and v.vote_ip == ^vote_ip)
+      |> select([v], v.option_id)
+      |> Repo.one()
+    # Repo.exists?(from v in Vote, where: ^vote_ip == v.vote_ip and ^poll_id == v.poll_id)
   end
 
   def perform_vote(attrs_vote) do
