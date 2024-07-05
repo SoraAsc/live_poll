@@ -52,6 +52,10 @@ defmodule LivePoll.LivePolls do
     Repo.one(from v in Vote, where: v.poll_id == ^id, select: count(v.id))
   end
 
+  def already_voted(poll_id, vote_ip) do
+    Repo.exists?(from v in Vote, where: ^vote_ip == v.vote_ip and ^poll_id == v.poll_id)
+  end
+
   def perform_vote(attrs_vote) do
     attrs_vote
       |> Vote.changeset()

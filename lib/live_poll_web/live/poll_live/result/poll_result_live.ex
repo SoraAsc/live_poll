@@ -4,19 +4,26 @@ defmodule LivePollWeb.PollLive.Result.PollResultLive do
   import LivePoll.LivePolls
 
   def mount(%{"id" => id}, session, socket) do
-    if(connected?(socket)) do
-      PubSub.subscribe(LivePoll.PubSub, "vote_counter#{id}")
-    end
     user_ip = Map.get(session, "user_ip")
-    results = get_poll_results(id)
-    options_list = Enum.map(results, fn %{option_name: p1} -> p1 end)
-    votes_list = Enum.map(results, fn %{vote_count: p2} -> p2 end)
-    {:ok, socket
-      |> assign(:client_ip, user_ip)
-      |> assign(:poll, get_poll!(id))
-      |> assign(:options, options_list)
-      |> assign(:votes, votes_list)
-    }
+    if(!already_voted(id, user_ip)) do
+      {:ok, socket
+      |> put_flash(:error, "É necessário votar, antes de visualizar os resultados!")
+      |> push_redirect(to: "/poll/inspect/" <> id)}
+    else
+      if(connected?(socket)) do
+        PubSub.subscribe(LivePoll.PubSub, "vote_counter#{id}")
+      end
+
+      results = get_poll_results(id)
+      options_list = Enum.map(results, fn %{option_name: p1} -> p1 end)
+      votes_list = Enum.map(results, fn %{vote_count: p2} -> p2 end)
+      {:ok, socket
+        |> assign(:client_ip, user_ip)
+        |> assign(:poll, get_poll!(id))
+        |> assign(:options, options_list)
+        |> assign(:votes, votes_list)
+      }
+    end
   end
 
   def handle_info(:refresh_vote, socket) do
