@@ -1,5 +1,5 @@
 <div>
-    <div class="mb-4 font-inter font-thin group flex justify-between items-center mx-5">
+    <div class="container-b-c flex-col md:flex-row mb-4 font-inter font-thin group md:mx-5 space-y-4 md:space-y-0">
         <label class="relative">
             <input maxlength="20" type="text" placeholder="Search..." 
                 class="py-3 pl-5 pr-12 text-quartiary placeholder:text-quartiary/50 bg-transparent rounded-full border-quartiary w-72 text-base"
@@ -13,7 +13,7 @@
         </.link>
     </div>
     <hr class="border-quartiary/30">
-    <div class="mt-4 mx-14 flex justify-between items-center">
+    <div class="container-b-c mt-4 md:mx-12 flex-col md:flex-row space-y-4 md:space-y-0">
         <.select_dropdown options={LivePoll.Utils.FilterOptions.filter_names} 
             current_filter={@selected_filter} sort_order={@sort_order} 
             id="dropdown_menu_select" event="pick_option_select"/>
@@ -21,7 +21,7 @@
         <.select_dropdown_multiple options={LivePoll.Utils.FilterOptions.categories} 
             selecteds={@desired_categories} id="dropdown_menu_multiple_select" event="pick_options_m_select"/>
     </div>
-    <div class="mt-4 mx-32 flex justify-start flex-wrap gap-8">
+    <div class="grid-container mt-4 md:mx-32">
         <%= for poll <- @polls do %>
         <.link patch={~p"/poll/inspect/#{poll.id}"}>
             <div class="flex flex-col justify-between border-2 hover:scale-110 cursor-pointer transition-transform

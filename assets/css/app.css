@@ -12,10 +12,10 @@
     text-decoration: none;
 }
 
-body {
-    font-size: 100%;
-    list-style-type: none;
-    @apply bg-primary min-w-full w-auto min-h-screen;
+
+.body-container {
+    @apply min-w-[320px] w-auto min-h-screen bg-primary;
+    @apply text-[100%] list-none antialiased;
 }
 
 /* Fonts Definition */
@@ -47,6 +47,21 @@ body {
     font-family: "IFellPrimerSC";
     src: url("/fonts/IMFellGreatPrimerSC-Regular.ttf");
     font-weight: 400;
+}
+
+/* Custom styles */
+
+.container-b-c {
+    @apply flex justify-between items-center;
+}
+
+.grid-container {
+    @apply grid justify-items-center gap-4;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+.default-button {
+    @apply md:min-w-[98px] py-2 md:px-6 px-2 min-w-[70px] rounded-lg shadow-md transition-colors;
 }
 
 .svg-button {
