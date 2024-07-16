@@ -8,22 +8,44 @@ defmodule LivePollWeb.PollLive.PollHomeLive do
     {:ok, socket
       |> assign(:client_ip, user_ip)
       |> assign(:polls, list_polls())
-      |> assign(:selected_filter, "Name")
+      |> assign(:selected_filter, "Date")
       |> assign(:sort_order, "asc")
       |> assign(:desired_categories, [])
+      |> assign(:filters, %{:search => "", field: {:title, :asc}})
+    }
+  end
+
+  def handle_event("search", %{"search" => search_term}, socket) do
+    updated_map = Map.put(socket.assigns.filters, :search, search_term)
+    {:noreply, socket
+      |> assign(:polls, list_polls_filter(updated_map))
+      |> assign(:filters, updated_map)
     }
   end
 
   def handle_event("pick_option_select", %{"value" => value}, socket) do
+    {_, sort} = socket.assigns.filters.field
+    option = case value do
+      "Vote" -> :vote
+      "Date" -> :inserted_at
+      _ -> :title
+    end
+    updated_map = Map.put(socket.assigns.filters, :field, {option, sort})
     {:noreply, socket
       |> assign(:selected_filter, value)
+      |> assign(:filters, updated_map)
+      |> assign(:polls, list_polls_filter(updated_map))
     }
   end
 
   def handle_event("change_sort_order_select", _params, socket) do
     sort = if socket.assigns.sort_order == "asc", do: "desc", else: "asc"
+    {field, _} = socket.assigns.filters.field
+    updated_map = Map.put(socket.assigns.filters, :field, {field, String.to_atom(sort)})
     {:noreply, socket
       |> assign(:sort_order, sort)
+      |> assign(:filters, updated_map)
+      |> assign(:polls, list_polls_filter(updated_map))
     }
   end
 

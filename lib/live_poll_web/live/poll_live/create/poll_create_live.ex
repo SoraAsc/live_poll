@@ -11,6 +11,7 @@ defmodule LivePollWeb.PollLive.Create.PollCreateLive do
       |> assign(:client_ip, user_ip)
       |> assign(:changeset, to_form(changeset))
       |> assign(:options, [])
+      |> assign(:errors, [])
     }
   end
 
@@ -37,8 +38,23 @@ defmodule LivePollWeb.PollLive.Create.PollCreateLive do
 
   def handle_event("create_poll", %{"poll" => poll_params}, socket) do
     map = Map.put(poll_params, "creator_ip", socket.assigns.client_ip)
-    create_poll(map, socket.assigns.options)
-    {:noreply, socket}
+
+    case create_poll(map, socket.assigns.options) do
+      {:ok, _poll} -> {:noreply, push_navigate(socket, to: "/")}
+
+      {:error, message} when is_binary(message) -> {:noreply, put_flash(socket, :error, message)}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        IO.inspect(changeset)
+        {:noreply, assign(socket, changeset: to_form(changeset), errors: format_changeset_errors(changeset))}
+    end
   end
 
+  defp format_changeset_errors(changeset) do
+    Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+      Enum.reduce(opts, msg, fn {key, value}, acc ->
+        String.replace(acc, "%{#{key}}", to_string(value))
+      end)
+    end)
+  end
 end

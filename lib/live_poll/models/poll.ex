@@ -25,6 +25,7 @@ defmodule LivePoll.Models.Poll do
     %__MODULE__{}
     |> cast(params, @fields)
     |> validate_required([:title, :creator_ip])
-    |> validate_length(:title, min: 4)
+    |> validate_length(:title, min: 5)
+    |> cast_assoc(:option, required: true)
   end
 end

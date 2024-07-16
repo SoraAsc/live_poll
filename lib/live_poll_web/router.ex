@@ -13,9 +13,7 @@ defmodule LivePollWeb.Router do
 
   defp assign_user_ip(conn, _opts) do
     ip = conn.remote_ip |> Tuple.to_list() |> Enum.join(".")
-    IO.inspect(Enum.join(Tuple.to_list(conn.remote_ip), "."))
     put_session(conn, :user_ip, ip)
-    # assign(conn, :user_ip, ip)
   end
 
   pipeline :api do

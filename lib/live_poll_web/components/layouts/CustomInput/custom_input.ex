@@ -2,6 +2,7 @@ defmodule LivePollWeb.Layouts.CustomInput.CustomInput do
   use Phoenix.Component
 
   attr :field, :map, default: %{}
+  attr :errors, :map, default: []
   attr :type, :string, default: "text"
   attr :class, :string, default: ""
   attr :rest, :global, include: ~w(disabled form name value required)
@@ -16,7 +17,13 @@ defmodule LivePollWeb.Layouts.CustomInput.CustomInput do
         class={[@class]}
         {@rest}
       />
-      <.error :for={msg <- @field.errors}><%= msg %></.error>
+      <%= if @errors do %>
+        <span>
+          <%= for error <- @errors do %>
+            <%= error %><br>
+          <% end %>
+        </span>
+      <% end %>
     </div>
     """
   end
@@ -34,16 +41,7 @@ defmodule LivePollWeb.Layouts.CustomInput.CustomInput do
         class={[@class]}
         {@rest}
       />
-      <.error :for={msg <- @field.errors}><%= msg %></.error>
     </div>
-    """
-  end
-
-  def error(assigns) do
-    ~H"""
-    <p class="phx-no-feedback:hidden">
-      <%= render_slot(@inner_block) %>
-    </p>
     """
   end
 end

@@ -1,5 +1,5 @@
 <.form for={@changeset} class="form_group" phx-submit="create_poll">
-    <.custom_input type="text" field={@changeset[:title]} placeholder="Title" required/>
+    <.custom_input type="text" errors={@errors[:title]} field={@changeset[:title]} placeholder="Title" required/>
     <.custom_input_area field={@changeset[:description]} 
         placeholder="Description" class="min-h-28 max-h-96"/>
     <div class="relative flex items-center">
@@ -12,6 +12,13 @@
     </div>
     <h5 class="text-3xl mx-auto">Options</h5>
     <div class="space-y-3">
+        <%= if @errors[:option] do %>
+        <span>
+            <%= for error <- @errors[:option] do %>
+              The Options <%= error %><br>
+            <% end %>
+        </span>
+        <% end %>
         <%= for {option, i} <- Enum.with_index(@options) do %>
             <div class="relative flex items-center">
                 <input 

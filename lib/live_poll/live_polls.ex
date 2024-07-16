@@ -6,33 +6,75 @@ defmodule LivePoll.LivePolls do
   alias LivePoll.Repo
 
   def create_poll(attrs_poll \\ %{}, attrs_option_list) do
-    if length(attrs_option_list) > 6 do
-      {:error, "Há mais opções do que o máximo esperado(6)"}
-    else
-      Repo.transaction(fn ->
-        {status, data} = attrs_poll
-          |> Poll.changeset()
-          |> Repo.insert()
-        if status == :ok do
-          attrs_option_list
-            |> Enum.map(&create_option(&1, data.id))
-        else
-          {:error, data.errors}
-        end
-      end)
+    cond do
+      length(attrs_option_list) < 2 ->
+        {:error, "O número mínimo de opções é 2."}
+
+      length(attrs_option_list) > 6 ->
+        {:error, "Há mais opções do que o máximo esperado (6)."}
+
+      true ->
+        poll_changeset = Poll.changeset(attrs_poll)
+
+        Repo.transaction(fn ->
+          with {:ok, poll} <- Repo.insert(poll_changeset),
+               {:ok, _options} <- insert_options(poll, attrs_option_list) do
+            {:ok, poll}
+          else
+            {:error, changeset} -> Repo.rollback(changeset)
+          end
+        end)
     end
   end
 
-  defp create_option(attrs_option, poll_id) do
-    {:ok, _option} = Map.put(attrs_option, :poll_id, poll_id)
-      |> Option.changeset()
-      |> Repo.insert()
+  defp insert_options(poll, options_attrs) do
+    options_changesets = Enum.map(options_attrs, fn option_attrs ->
+      Option.changeset(Map.put(option_attrs, :poll_id, poll.id))
+    end)
+
+    case Enum.all?(options_changesets, &(&1.valid?)) do
+      true ->
+        Enum.each(options_changesets, &Repo.insert!/1)
+        {:ok, options_changesets}
+      false ->
+        {:error, options_changesets |> Enum.find(&(!&1.valid?))}
+    end
   end
 
   def list_polls do
     query = from p in Poll, select: %{id: p.id, title: p.title, image_url: p.image_url, ip: p.creator_ip}
     Repo.all(query)
   end
+
+  def list_polls_filter(filters \\ %{}) do
+    Poll
+    |> select_polls_fields
+    |> apply_field_filter(filters)
+    |> apply_search_filter(filters)
+    |> Repo.all()
+  end
+
+  defp select_polls_fields(query) do
+    from p in query, select: %{id: p.id, title: p.title, image_url: p.image_url, ip: p.creator_ip}
+  end
+
+  defp apply_search_filter(query, %{search: search_term}) do
+    from p in query, where: ilike(p.title, ^"%#{search_term}%")
+  end
+
+  defp apply_field_filter(query, %{field: {:vote, order}}) do
+    from p in query,
+    left_join: v in Vote, on: v.poll_id == p.id,
+    group_by: p.id,
+    order_by: [{^order, count(v.id)}]
+  end
+  defp apply_field_filter(query, %{field: {field_name, order}}) when field_name in [:title, :inserted_at] do
+    from p in query, order_by: [{^order, ^field_name}]
+  end
+
+  # defp apply_category_filter(query, %{categories: categories}) when is_list(categories) do
+  #   from p in query, where: p.category_id in ^categories
+  # end
 
   def get_poll!(id) do
     try do

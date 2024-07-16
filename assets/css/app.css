@@ -80,7 +80,7 @@
 
 .form_group {
     @apply bg-secondary border-t-8 rounded-2xl border-t-tertiary drop-shadow-lg;
-    @apply min-w-[320px] w-8/12 px-12 mx-auto py-4 text-quartiary;
+    @apply min-w-[310px] w-8/12 px-12 mx-auto py-4 text-quartiary;
     @apply font-im_fell_great_primer_sc;
     @apply flex flex-col space-y-4;
 }

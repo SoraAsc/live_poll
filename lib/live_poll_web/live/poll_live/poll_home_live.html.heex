@@ -1,7 +1,7 @@
 <div>
-    <div class="container-b-c flex-col md:flex-row mb-4 font-inter font-thin group md:mx-5 space-y-4 md:space-y-0">
+    <form class="container-b-c flex-col md:flex-row mb-4 font-inter font-thin group md:mx-5 space-y-4 md:space-y-0">
         <label class="relative">
-            <input maxlength="20" type="text" placeholder="Search..." 
+            <input id="search_poll_input" maxlength="20" type="text" placeholder="Search..." phx-change="search" phx-update="ignore" phx-debounce="500" name="search"
                 class="py-3 pl-5 pr-12 text-quartiary placeholder:text-quartiary/50 bg-transparent rounded-full border-quartiary w-72 text-base"
             >
             <svg class="group-focus-within:text-quartiary hover:opacity-0 transition-opacity text-quartiary/50 fill-current  w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-6" viewBox="0 0 32 32">
@@ -11,7 +11,7 @@
         <.link navigate={~p"/create"} class="text-2xl text-quartiary rounded-full border border-quartiary px-8 py-2 hover:bg-quartiary hover:text-quinary transition-colors">
             Create new Poll
         </.link>
-    </div>
+    </form>
     <hr class="border-quartiary/30">
     <div class="container-b-c mt-4 md:mx-12 flex-col md:flex-row space-y-4 md:space-y-0">
         <.select_dropdown options={LivePoll.Utils.FilterOptions.filter_names} 

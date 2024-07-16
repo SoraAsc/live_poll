@@ -31,7 +31,7 @@ defmodule LivePollWeb.Layouts.Dropdown.Dropdown do
           <span><%= @current_filter %></span>
           <span class="hero-chevron-down cursor-pointer"></span>
         </div>
-        <div id={@id} class="dropdown_select_menu" hidden="true"
+        <div id={@id} class="dropdown_select_menu z-20" hidden="true"
           phx-click-away={toogle_dropdown_menu(@id)}
         >
           <%= for %{name: name} <- @options do %>
@@ -64,7 +64,7 @@ defmodule LivePollWeb.Layouts.Dropdown.Dropdown do
           <% end %>
           <span class="hero-chevron-down cursor-pointer"></span>
         </div>
-        <div id={@id} class="dropdown_select_menu" hidden="true"
+        <div id={@id} class="dropdown_select_menu z-20" hidden="true"
           phx-click-away={toogle_dropdown_menu(@id)}
         >
           <%= for %{name: name} <- @options do %>

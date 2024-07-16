@@ -20,6 +20,6 @@ defmodule LivePoll.Models.Option do
     %__MODULE__{}
     |> cast(params, @fields)
     |> validate_required(@fields)
+    |> validate_length(:option_name, min: 1)
   end
-
 end
