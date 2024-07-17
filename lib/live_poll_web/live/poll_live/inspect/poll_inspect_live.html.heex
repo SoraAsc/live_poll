@@ -8,7 +8,7 @@
         </div>
         <span class="hero-ellipsis-vertical-solid cursor-pointer w-10 h-10"/>
     </div>
-    <%= for option <- @poll.options do %>
+    <%= for option <- @poll.option do %>
         <div class="font-im_fell_double_pica">
             <input 
                 checked={option.id == @selected_option}
@@ -27,3 +27,6 @@
         </.link>
     </div>
 </form>
+<div class="form_group mt-10 min-h-40">
+    <%= @poll.description %>
+</div>

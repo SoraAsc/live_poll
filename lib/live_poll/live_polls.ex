@@ -79,12 +79,11 @@ defmodule LivePoll.LivePolls do
   def get_poll!(id) do
     try do
       poll = Repo.get!(Poll, id)
-      options = Option
-        |> where([o], o.poll_id == ^id)
-        |> select([o], %{id: o.id, name: o.option_name})
-        |> Repo.all()
-
-      Map.put(poll, :options, options)
+        |> Repo.preload(option: from(o in Option, select: %{id: o.id, name: o.option_name}))
+        |> Repo.preload(:categories)
+        # |> Repo.preload(:poll_category)
+      IO.inspect(poll)
+      poll
     rescue
       _ -> nil
     end

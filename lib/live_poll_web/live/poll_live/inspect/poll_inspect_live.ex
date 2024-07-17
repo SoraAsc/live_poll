@@ -13,7 +13,7 @@ defmodule LivePollWeb.PollLive.Inspect.PollInspectLive do
         if(connected?(socket)) do
           PubSub.subscribe(LivePoll.PubSub, "vote_counter#{id}")
         end
-
+        IO.inspect(poll)
         user_ip = Map.get(session, "user_ip")
         {:ok, socket
           |> assign(:client_ip, user_ip)

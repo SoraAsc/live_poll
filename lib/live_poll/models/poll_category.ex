@@ -8,7 +8,6 @@ defmodule LivePoll.Models.PollCategory do
   @fields [:poll_id, :category_id]
 
   schema "poll_categories" do
-    field :vote_ip, :string
 
     belongs_to :category, Category
     belongs_to :poll, Poll

@@ -16,6 +16,7 @@ defmodule LivePoll.Models.Poll do
 
     has_many :vote, Vote
     has_many :poll_category, PollCategory
+    has_many :categories, through: [:poll_category, :category]
     has_many :option, Option
 
     timestamps()
