@@ -1,11 +1,10 @@
 defmodule LivePoll.LivePolls do
 
   import Ecto.Query, warn: false
-  alias LivePoll.Models.Vote
-  alias LivePoll.Models.{Option, Poll}
+  alias LivePoll.Models.{Option, Poll, PollCategory, Vote}
   alias LivePoll.Repo
 
-  def create_poll(attrs_poll \\ %{}, attrs_option_list) do
+  def create_poll(attrs_poll \\ %{}, attrs_option_list, category_ids) do
     cond do
       length(attrs_option_list) < 2 ->
         {:error, "O número mínimo de opções é 2."}
@@ -18,6 +17,7 @@ defmodule LivePoll.LivePolls do
 
         Repo.transaction(fn ->
           with {:ok, poll} <- Repo.insert(poll_changeset),
+               {:ok, _categories} <-insert_categories(poll, category_ids),
                {:ok, _options} <- insert_options(poll, attrs_option_list) do
             {:ok, poll}
           else
@@ -41,6 +41,20 @@ defmodule LivePoll.LivePolls do
     end
   end
 
+  defp insert_categories(poll, category_ids) do
+    categories_changesets = Enum.map(category_ids, fn cat_id ->
+      PollCategory.changeset(%{poll_id: poll.id, category_id: cat_id})
+    end)
+
+    case Enum.all?(categories_changesets, &(&1.valid?)) do
+      true ->
+        Enum.each(categories_changesets, &Repo.insert!/1)
+        {:ok, categories_changesets}
+      false ->
+        {:error, categories_changesets |> Enum.find(&(!&1.valid?))}
+    end
+  end
+
   def list_polls do
     query = from p in Poll, select: %{id: p.id, title: p.title, image_url: p.image_url, ip: p.creator_ip}
     Repo.all(query)
@@ -49,6 +63,7 @@ defmodule LivePoll.LivePolls do
   def list_polls_filter(filters \\ %{}) do
     Poll
     |> select_polls_fields
+    |> apply_category_filter(filters)
     |> apply_field_filter(filters)
     |> apply_search_filter(filters)
     |> Repo.all()
@@ -72,17 +87,19 @@ defmodule LivePoll.LivePolls do
     from p in query, order_by: [{^order, ^field_name}]
   end
 
-  # defp apply_category_filter(query, %{categories: categories}) when is_list(categories) do
-  #   from p in query, where: p.category_id in ^categories
-  # end
+  defp apply_category_filter(query, %{categories: categories}) when length(categories) > 0 do
+    from p in query,
+      left_join: pc in PollCategory, on: pc.poll_id == p.id,
+      group_by: p.id,
+      where: pc.category_id in ^categories
+  end
+  defp apply_category_filter(query, %{categories: _categories}), do: query
 
   def get_poll!(id) do
     try do
       poll = Repo.get!(Poll, id)
         |> Repo.preload(option: from(o in Option, select: %{id: o.id, name: o.option_name}))
         |> Repo.preload(:categories)
-        # |> Repo.preload(:poll_category)
-      IO.inspect(poll)
       poll
     rescue
       _ -> nil

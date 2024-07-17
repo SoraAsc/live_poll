@@ -19,7 +19,7 @@ defmodule LivePollWeb.Layouts.Dropdown.Dropdown do
   def select_dropdown(assigns) do
     ~H"""
       <div class="dropdown_select">
-        <div class="flex justify-between items-center h-full w-full px-2"
+        <div class="flex justify-between items-center h-full w-full px-2 after:cursor-pointer after:hero-chevron-down after:min-h-6 after:min-w-6"
           phx-click={toogle_dropdown_menu(@id)}>
           <svg phx-click="change_sort_order_select" class="svg-button" viewBox="0 0 16 16">
             <%= if @sort_order == "desc" do %>
@@ -29,49 +29,54 @@ defmodule LivePollWeb.Layouts.Dropdown.Dropdown do
             <% end %>
           </svg>
           <span><%= @current_filter %></span>
-          <span class="hero-chevron-down cursor-pointer"></span>
         </div>
-        <div id={@id} class="dropdown_select_menu z-20" hidden="true"
+        <div id={@id} class="dropdown_select_menu bg-primary z-20" hidden="true"
           phx-click-away={toogle_dropdown_menu(@id)}
         >
           <%= for %{name: name} <- @options do %>
-            <span phx-value-value={name} phx-click={pick_option(name, @id, @event)}
+            <p phx-value-value={name} phx-click={pick_option(name, @id, @event)}
               class="hover:bg-quartiary hover:text-primary cursor-pointer px-2">
               <%= name %>
-            </span>
+            </p>
           <% end %>
         </div>
       </div>
     """
   end
 
+  attr :event, :string, default: ""
+  attr :id, :string, default: ""
+  attr :selecteds, :map, default: []
+  attr :options, :map, default: []
+  attr :placeholder, :string, default: ""
+  attr :class, :string, default: "border-quartiary"
+  attr :menuclass, :string, default: "border-quartiary bg-primary"
   def select_dropdown_multiple(assigns) do
     ~H"""
-      <div class="dropdown_select">
-        <div class="flex justify-between items-center h-full w-full px-2"
+      <div class={["dropdown_select", @class]}>
+        <div class="flex justify-between items-center h-full w-full px-2 after:cursor-pointer after:hero-chevron-down after:min-h-6 after:min-w-6"
           phx-click={toogle_dropdown_menu(@id)}>
           <%= if length(@selecteds) <= 0 do %>
-            <span class="text-quartiary/50 text-sm">Filter by Category</span>
+            <span class="text-quartiary/50 text-sm"><%= @placeholder %></span>
           <% else %>
             <div class="flex truncate">
               <%= for item <- @selecteds do %>
-                <div class="rounded-xl py-1 px-2 space-x-1 flex items-center text-sm bg-tertiary">
+                <div class="rounded-xl py-1 px-2 space-x-1 mr-1 flex items-center text-sm bg-tertiary">
                   <span><%= item %></span>
                   <span phx-value-value={item} phx-click={@event} class="cursor-pointer hero-x-mark w-4 h-4"/>
                 </div>
               <% end %>
             </div>
           <% end %>
-          <span class="hero-chevron-down cursor-pointer"></span>
         </div>
-        <div id={@id} class="dropdown_select_menu z-20" hidden="true"
+        <div id={@id} class={[@menuclass, "dropdown_select_menu z-20"]} hidden="true"
           phx-click-away={toogle_dropdown_menu(@id)}
         >
           <%= for %{name: name} <- @options do %>
-            <span phx-value-value={name} phx-click={@event}
+            <p phx-value-value={name} phx-click={@event}
               class={" #{if Enum.member?(@selecteds, name), do: "before:hero-check-circle-solid before:w-4 before:h-4"} hover:bg-quartiary hover:text-primary cursor-pointer px-2"}>
               <%= name %>
-            </span>
+            </p>
           <% end %>
         </div>
       </div>

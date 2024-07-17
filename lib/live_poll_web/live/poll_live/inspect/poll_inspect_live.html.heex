@@ -27,6 +27,15 @@
         </.link>
     </div>
 </form>
-<div class="form_group mt-10 min-h-40">
-    <%= @poll.description %>
-</div>
+<%= if (@poll.description && String.length(@poll.description) > 0) || length(@poll.categories) > 0 do %>
+    <div class="form_group mt-10 ">
+        <div class="mx-auto">
+            <%= @poll.description %>
+            <div class="flex justify-center items-center flex-wrap">
+                <%= for category <- @poll.categories do %>
+                    <p class="bg-tertiary rounded-3xl py-2 px-6 w-32 my-4 mr-4 text-center shadow-md"><%= category.name %></p>
+                <% end %>
+            </div>
+        </div>
+    </div>
+<% end %>

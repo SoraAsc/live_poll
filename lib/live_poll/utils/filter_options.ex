@@ -9,8 +9,9 @@ defmodule LivePoll.Utils.FilterOptions do
 
   def categories do
     [
-      %{id: 0, name: "Food"},
-      %{id: 1, name: "Movie"},
+      %{id: 1, name: "Food"},
+      %{id: 3, name: "Movie"},
+      %{id: 5, name: "Book"},
     ]
   end
 end

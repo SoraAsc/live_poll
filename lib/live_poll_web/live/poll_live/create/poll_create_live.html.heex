@@ -2,6 +2,9 @@
     <.custom_input type="text" errors={@errors[:title]} field={@changeset[:title]} placeholder="Title" required/>
     <.custom_input_area field={@changeset[:description]} 
         placeholder="Description" class="min-h-28 max-h-96"/>
+    <.select_dropdown_multiple options={LivePoll.Utils.FilterOptions.categories} 
+        placeholder="Select Your Categories" class="border-tertiary" menuclass="border-tertiary bg-secondary"
+        selecteds={@desired_categories} id="dropdown_menu_multiple_select" event="select_categories"/>
     <div class="relative flex items-center">
         <input type="text" id="option-input" placeholder="Provide an Option" />
         <div id="add-option-trigger" phx-hook="AddOption" 
@@ -35,7 +38,7 @@
                     after:hero-trash-solid after:w-full after:h-full">
                 </div>
             </div>
-        <% end %> 
+        <% end %>
     </div>
     <button type="submit" class="submit">Create Poll</button>
 </.form>

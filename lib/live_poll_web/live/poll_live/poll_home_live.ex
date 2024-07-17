@@ -11,7 +11,7 @@ defmodule LivePollWeb.PollLive.PollHomeLive do
       |> assign(:selected_filter, "Date")
       |> assign(:sort_order, "asc")
       |> assign(:desired_categories, [])
-      |> assign(:filters, %{:search => "", field: {:title, :asc}})
+      |> assign(:filters, %{:search => "", :categories => [], field: {:title, :asc}})
     }
   end
 
@@ -51,29 +51,21 @@ defmodule LivePollWeb.PollLive.PollHomeLive do
 
   def handle_event("pick_options_m_select", %{"value" => value}, socket) do
     cats = delete_or_insert(socket.assigns.desired_categories, value)
-    IO.inspect(value)
+
+    result = Enum.filter(LivePoll.Utils.FilterOptions.categories, fn %{name: n} -> n in cats end)
+    ids = Enum.map(result, fn %{id: i} -> i end)
+    updated_map = Map.put(socket.assigns.filters, :categories, ids)
     {:noreply, socket
+      |> assign(:polls, list_polls_filter(updated_map))
       |> assign(:desired_categories, cats)
+      |> assign(:filters, updated_map)
     }
   end
 
   defp delete_or_insert(list, item) do
     case Enum.member?(list, item) do
       true -> Enum.filter(list, fn x -> x != item end)
-      false -> [item | list]
+      false -> list ++ [item]#[item | list]
     end
   end
-
-  # defp get_public_ip do
-  #   "https://api.ipify.org?format=json"
-  #   |> HTTPoison.get()
-  #   |> case do
-  #     {:ok, %HTTPoison.Response{body: body}} ->
-  #       {:ok, data} = Jason.decode(body)
-  #       Map.get(data, "ip")
-  #     _ ->
-  #       "Unknown"
-  #   end
-  # end
-
 end

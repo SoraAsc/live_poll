@@ -3,6 +3,7 @@ defmodule LivePollWeb.PollLive.Create.PollCreateLive do
   alias LivePoll.Models.Poll
   import LivePoll.LivePolls
   import LivePollWeb.Layouts.CustomInput.CustomInput
+  import LivePollWeb.Layouts.Dropdown.Dropdown
 
   def mount(_params, session, socket) do
     user_ip = Map.get(session, "user_ip")
@@ -11,7 +12,16 @@ defmodule LivePollWeb.PollLive.Create.PollCreateLive do
       |> assign(:client_ip, user_ip)
       |> assign(:changeset, to_form(changeset))
       |> assign(:options, [])
+      |> assign(:desired_categories, [])
       |> assign(:errors, [])
+    }
+  end
+
+  def handle_event("select_categories", %{"value" => value}, socket) do
+    cats = delete_or_insert(socket.assigns.desired_categories, value)
+
+    {:noreply, socket
+      |> assign(:desired_categories, cats)
     }
   end
 
@@ -39,13 +49,15 @@ defmodule LivePollWeb.PollLive.Create.PollCreateLive do
   def handle_event("create_poll", %{"poll" => poll_params}, socket) do
     map = Map.put(poll_params, "creator_ip", socket.assigns.client_ip)
 
-    case create_poll(map, socket.assigns.options) do
+    result = Enum.filter(LivePoll.Utils.FilterOptions.categories, fn %{name: n} -> n in socket.assigns.desired_categories end)
+    ids = Enum.map(result, fn %{id: i} -> i end)
+
+    case create_poll(map, socket.assigns.options, ids) do
       {:ok, _poll} -> {:noreply, push_navigate(socket, to: "/")}
 
       {:error, message} when is_binary(message) -> {:noreply, put_flash(socket, :error, message)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        IO.inspect(changeset)
         {:noreply, assign(socket, changeset: to_form(changeset), errors: format_changeset_errors(changeset))}
     end
   end
@@ -56,5 +68,12 @@ defmodule LivePollWeb.PollLive.Create.PollCreateLive do
         String.replace(acc, "%{#{key}}", to_string(value))
       end)
     end)
+  end
+
+  defp delete_or_insert(list, item) do
+    case Enum.member?(list, item) do
+      true -> Enum.filter(list, fn x -> x != item end)
+      false -> list ++ [item] #[item | list]
+    end
   end
 end
